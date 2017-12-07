@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Test Bench :: Test Beds{% endblock %}
+
+{% block page %}
+    <script language="JavaScript">
+        // Define a function for later use
+        function get_json_info(reservation ,jsonPath) {
+            var jsonObj = JSON.parse(reservation)
+
+            for (var i=0, jsonPath=jsonPath.split('.'), len=jsonPath.length; i<len; i++){
+                jsonObj = jsonObj[jsonPath[i]]
+            }
+            document.write(jsonObj)
+        }
+    </script>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Reservations</h1>
+
+            <div class="panel-group" id="accordion-testbed" role="tablist" aria-multiselectable="true">
+                <!-- <h5><b>Reservations</b></h5> -->
+                <table style="width:100%">
+                    <tr>
+                        <th>UUID</th>
+                        <th>Creation Date</th>
+                        <th>End Date</th>
+                        <th>State</th>
+                        <th>User</th>
+                        <th>Link</th>
+                    </tr>
+
+                    {% for reservation in reservations%}
+                    <tr>
+                        <td>
+                            <!-- UUID -->
+                            <script type="text/javaScript">
+                                // console.log({{reservation|tojson}})
+                                var jsonObj = JSON.parse({{reservation|tojson}})
+
+                                // console.log(jsonObj.info.instance.uuid)
+                                document.getElementById("uuid").setAttribute('title', jsonObj.info.instance.uuid)
+                            </script>
+                            <a href="#" id="uuid" title=""><i class="fa fa-info-circle fa-fw"></i></a>
+                        </td>
+                        <td>
+                            <!-- creation date -->
+                            <script type="text/javaScript">
+                                get_json_info({{reservation|tojson}}, "creation_date")
+                            </script>
+                        </td>
+                        <td>
+                            <!-- end date -->
+                            <script type="text/javaScript">
+                                get_json_info({{reservation|tojson}}, "end_date")
+                            </script>
+                        </td>
+                        <td>
+                            <!-- state -->
+                            <script type="text/javaScript">
+                                get_json_info({{reservation|tojson}}, "state")
+                            </script>
+                        </td>
+                        <td>
+                            <!-- creation date -->
+                            <script type="text/javaScript">
+                                get_json_info({{reservation|tojson}}, "info.user.name")
+                            </script>
+                        </td>
+                        <td>
+                            GET LINK HERE
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+{% endblock %}
