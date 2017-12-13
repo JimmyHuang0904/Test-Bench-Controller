@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Test Bench :: Test Beds{% endblock %}
+
+{% block page %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Reservations</h1>
+
+            <div class="panel-group" id="accordion-testbed" role="tablist" aria-multiselectable="true">
+                {% if error %}
+                <div class="alert alert-danger">
+                    <strong>Error:</strong> {{error}}
+                </div>
+                {% endif %}
+                <form role="form" action="{{ url_for('tb_reservation.reservations') }}" method="post">
+                    {{ form.hidden_tag() }}
+
+                    <fieldset>
+                        <div class="form-group">
+                            {{ form.request.label }}
+                            {{ form.request(class_="form-control") }}
+                        </div>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </fieldset>
+                </form>
+                <table style="width:100%">
+                    <tr>
+                        <th>UUID</th>
+                        <th>Creation Date</th>
+                        <th>End Date</th>
+                        <th>State</th>
+                        <th>User</th>
+                        <th>Link</th>
+                    </tr>
+
+                    {% for reservation in reservations %}
+                    <tr>
+                        <td>
+                            <a href="#" id="uuid" title="{{reservation.uuid}}"><i class="fa fa-info-circle fa-fw"></i></a>
+                        </td>
+                        <td>
+                            {{reservation.creation_date()}}
+                        </td>
+                        <td>
+                            {{reservation.end_date()}}
+                        </td>
+                        <td>
+                            {% if reservation.state() == "READY" %}
+                            <span class="label label-success">
+                            {% elif reservation.state() == "ERROR" %}
+                            <span class="label label-danger">
+                            {% elif reservation.state() == "IN PROGRESS" %}
+                            <span class="label label-primary">
+                            {% elif reservation.state() == "EXPIRED" %}
+                            <span class="label label-warning">
+                            {% else %}
+                            <span class="label label-default">
+                            {% endif %}
+                                {{reservation.state()}}
+                            </span>
+                        </td>
+                        <td>
+                            {{reservation.user()}}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('tb_reservation.reserve_info_by_uuid', uuid=reservation.uuid) }}">GET</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+{% endblock %}
