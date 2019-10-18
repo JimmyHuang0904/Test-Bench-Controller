@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 
-Flask = ">=0.12,<0.13"
+Flask = ">=0.12,<1.1"
 "Flask-Assets" = "*"
 "Flask-Cache" = "*"
 "Flask-DebugToolbar" = "*"
