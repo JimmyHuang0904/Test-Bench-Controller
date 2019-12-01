@@ -50,8 +50,7 @@ def reservations():
 def testbed_reserve_request():
     if request.method == 'POST':
         uuid = str(reserve_tasks.generate_uuid())
-        print("uuid is %s" % uuid)
-
+ 
         pool = ThreadPool(processes=1)
         async_result = pool.apply_async(reserve_tasks.create_reservation, (request.json, current_user.username, uuid))
 
